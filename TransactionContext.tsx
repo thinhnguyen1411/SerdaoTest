@@ -7,12 +7,12 @@ export const useTransactions = () => useContext(TransactionContext);
 
 export const TransactionProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(1000);
 
   const addTransaction = async (amount, account) => {
     const newTransaction = { id: Date.now(), amount: parseFloat(amount), account };
     setTransactions((prevTransactions) => [...prevTransactions, newTransaction]);
-    const newBalance = balance + parseFloat(amount);
+    const newBalance = balance - parseFloat(amount);
     setBalance(newBalance);
 
     const transactionsStore = await AsyncStorage.getItem('transactions');
