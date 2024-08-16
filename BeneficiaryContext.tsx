@@ -7,7 +7,7 @@ export const useBeneficiaries = () => useContext(BeneficiaryContext);
 
 export const BeneficiaryProvider = ({ children }) => {
   const [beneficiaries, setBeneficiaries] = useState([]);
-  const [balance, setBalance] = useState(0);
+
   const [selectedBeneficiary, setSelectedBeneficiary] = useState();
 
   const addBeneficiary = async (firstName, lastName, iban) => {
@@ -35,7 +35,7 @@ export const BeneficiaryProvider = ({ children }) => {
   };
 
   return (
-    <BeneficiaryContext.Provider value={{ beneficiaries, selectedBeneficiary, selectBeneficiary, addBeneficiary, loadBeneficiaryList, balance }}>
+    <BeneficiaryContext.Provider value={{ beneficiaries, selectedBeneficiary, selectBeneficiary, addBeneficiary, loadBeneficiaryList }}>
       {children}
     </BeneficiaryContext.Provider>
   );
