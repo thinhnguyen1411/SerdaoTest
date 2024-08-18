@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
-import { useTransactions } from './TransactionContext';
+import {View, Text, Button, FlatList, StyleSheet} from 'react-native';
+import {useTransactions} from './transactions/TransactionContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const HomeScreen = ({ navigation }) => {
-  const { transactions, balance, loadTransactionList, loadBalance } = useTransactions();
+const HomeScreen = ({navigation}) => {
+  const {transactions, balance, loadTransactionList, loadBalance} =
+    useTransactions();
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <View style={styles.item}>
       <Text style={styles.itemText}>Transaction ID: {item.id}</Text>
       <Text style={styles.itemText}>Amount: ${item.amount.toFixed(2)}</Text>
@@ -25,23 +26,25 @@ const HomeScreen = ({ navigation }) => {
       let transactionStoreArr = JSON.parse(transactionsStore) as Array<object>;
       loadTransactionList(transactionStoreArr);
     }
-  }
+  };
 
   const loadBalanceData = async () => {
     const balanceStore = await AsyncStorage.getItem('balance');
     if (balanceStore !== null) {
       loadBalance(parseFloat(balanceStore));
     }
-  }
+  };
   
   const clearData = async () => {
     loadTransactionList([]);
-    loadBalance(0);
+    loadBalance(1000);
+
     try {
       await AsyncStorage.removeItem('balance');
       await AsyncStorage.removeItem('transactions');
-    } catch(e) {
-      // remove error
+    } catch (e) {
+      // clear error
+      alert('Clear data error !');
     }
   };
   
@@ -60,7 +63,7 @@ const HomeScreen = ({ navigation }) => {
       <Button title="Clear" color="#FF0000" onPress={clearData} />
       <FlatList
         data={transactions}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
       />

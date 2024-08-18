@@ -1,56 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useBeneficiaries } from './BeneficiaryContext';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {useBeneficiaries} from './BeneficiaryContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BeneficiaryDto} from './BeneficiaryDto';
 
 const BeneficiaryList = ({ route, navigation }) => {
-  const { beneficiaries, selectBeneficiary, balance, loadBeneficiaryList } = useBeneficiaries();
-  const [selectedItem, setSelectedItem] = useState('');
+  const {beneficiaries, selectBeneficiary, balance, loadBeneficiaryList} =
+    useBeneficiaries();
+  const [selectedItem, setSelectedItem] = useState<number>(0);
 
-  const onPressAction = (rowItem) => {
+  const onPressAction = (rowItem: BeneficiaryDto) => {
     console.log('ListItem was selected');
     console.dir(rowItem);
     setSelectedItem(rowItem.id);
     selectBeneficiary(rowItem);
 
     navigation.goBack();
-  }
+  };
 
   const clearData = async () => {
     loadBeneficiaryList([]);
     try {
       await AsyncStorage.removeItem('beneficiaries');
-    } catch(e) {
+    } catch (e) {
       // remove error
+      alert('Clear data error !');
     }
   };
 
-const loadBeneficiary = async () => {
-  const beneficiariesStore = await AsyncStorage.getItem('beneficiaries');
-  if (beneficiariesStore !== null) {
-    let beneficiariesStoreArr = JSON.parse(beneficiariesStore) as Array<object>;
-    loadBeneficiaryList(beneficiariesStoreArr);
-  }
-}
+  const loadBeneficiary = async () => {
+    const beneficiariesStore = await AsyncStorage.getItem('beneficiaries');
+    if (beneficiariesStore !== null) {
+      let beneficiariesStoreArr = JSON.parse(
+        beneficiariesStore,
+      ) as Array<BeneficiaryDto>;
+      loadBeneficiaryList(beneficiariesStoreArr);
+    }
+  };
 
   useEffect(() => {
     loadBeneficiary();
   }, []);
 
-  const renderItem = ( item ) => {
-    
+  const renderItem = (item: BeneficiaryDto) => {
     const isSelectedUser = selectedItem === item.id;
-    
-    const viewStyle = isSelectedUser ? styles.selectedButton : styles.normalButton;
-    return(
-    <TouchableOpacity style={viewStyle} onPress={() => onPressAction(item)} >
-    <View style={styles.item}>
-      <Text style={styles.itemText}>First name: {item.firstName}</Text>
-      <Text style={styles.itemText}>Last name: {item.lastName}</Text>
-      <Text style={styles.itemText}>IBAN: {item.iban}</Text>
-    </View>
-    </TouchableOpacity>
-  )};
+
+    const viewStyle = isSelectedUser
+      ? styles.selectedButton
+      : styles.normalButton;
+
+    return (
+      <TouchableOpacity style={viewStyle} onPress={() => onPressAction(item)}>
+        <View style={styles.item}>
+          <Text style={styles.itemText}>First name: {item.firstName}</Text>
+          <Text style={styles.itemText}>Last name: {item.lastName}</Text>
+          <Text style={styles.itemText}>IBAN: {item.iban}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>

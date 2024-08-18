@@ -2,11 +2,11 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
-import TransactionScreen from './TransactionScreen';
-import BeneficiaryScreen from './BeneficiaryScreen';
-import { TransactionProvider } from './TransactionContext';
-import { BeneficiaryProvider } from './BeneficiaryContext';
-import BeneficiaryList from './BeneficiaryList';
+import TransactionScreen from './transactions/TransactionScreen';
+import BeneficiaryScreen from './beneficiaries/BeneficiaryScreen';
+import { TransactionProvider } from './transactions/TransactionContext';
+import { BeneficiaryProvider } from './beneficiaries/BeneficiaryContext';
+import BeneficiaryList from './beneficiaries/BeneficiaryList';
 
 const Stack = createNativeStackNavigator();
 
